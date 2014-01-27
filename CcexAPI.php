@@ -30,11 +30,8 @@ class CcexAPI {
     
     
     public function getPairs(){
-       $feed = $this->query($this->api_url.'pairs.json');
-       // data is not valid json, so we use some hacks
-       $feed = str_replace('{"pairs":{"','',$feed);
-       $feed = str_replace('"}}','',$feed);
-       return explode('","',$feed);
+       $json = json_decode( $this->query($this->api_url.'pairs.json'), true ); 
+       return $json['pairs'];
     }
 }
 
