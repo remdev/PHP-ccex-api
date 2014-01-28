@@ -26,7 +26,12 @@ class CcexAPI {
         
         $context  = stream_context_create($opts);
         $feed = file_get_contents($url, false, $context);
-        return json_decode($feed,true);
+        
+        if($feed == 'Empty error'){
+            return array('error' => 'Invalid parametres');
+        }else{
+            return json_decode($feed,true);
+        }
     }
     
     
@@ -42,10 +47,42 @@ class CcexAPI {
     }
     
     
-    public function getOrders($pair){
-        $json =  $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=orderlist&pair={$pair}");
-        return $json['return'];
+    public function getOrders($pair,$self = 0){
+        $self = intval( (bool)$self );//return only 0 or 1
+        return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=orderlist&self={$self}&pair={$pair}");
     }
+    
+    public function getHistory($pair,$fromTime = false,$toTime = false){
+        
+        if($fromTime === false){
+            $fromTime = 0;
+        }
+        
+        if($toTime === false){
+            $toTime = time();
+        }
+        
+        $fromDate = date('Y-d-m',(int)$fromTime);
+        $toDate = date('Y-d-m',(int)$toTime);
+        
+        return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=tradehistory&d1={$fromDate}&d2={$toDate}&pair={$pair}"); 
+    
+    }
+    
+    public function makeOrder($type,$pair,$quantity,$price){
+        if(strtolower($type) == 'sell'){
+            $type = 's';
+        }
+        if(strtolower($type) == 'buy'){
+            $type = 'b';
+        }
+        return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=makeorder&pair={$pair}&q={$quantity}&t={$type}&r={$price}");
+    }
+    
+    public function cancelOrder($order){
+        return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=cancelorder&id={$order}");
+    }
+    
 }
 
 
