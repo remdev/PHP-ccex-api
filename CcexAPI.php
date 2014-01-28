@@ -83,6 +83,10 @@ class CcexAPI {
         return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=cancelorder&id={$order}");
     }
     
+    public function getBalance(){
+        return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=getbalance");
+    }
+    
 }
 
 
