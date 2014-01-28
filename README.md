@@ -17,5 +17,16 @@ Get ticker quick example
 $CcexAPI->getTickerInfo('btc-usd');
 
 Get order list quick example  
-$orders = $CcexAPI->getOrders('btc-usd');
+$orders = $CcexAPI->getOrders('btc-usd',1);  
+
+Get history list quick example  
+$history = $CcexAPI->getHistory('btc-usd',0,time());  
+
+Make order example  
+$status = $CcexAPI->makeOrder('sell','btc-usd',100,820);  
+
+Cancel order example  
+$cancel = $CcexAPI->cancelOrder(1228);
+
+
 
