@@ -47,12 +47,17 @@ class CcexAPI {
     }
     
     
+    public function getVolumes($hours=24,$pair=false){
+        $url = ($pair) ? 'volume' : 'lastvolumes&pair='.$pair.'&';
+        return $this->jsonQuery($this->api_url."s.html?a=".$url."&h=".$hours);
+    }
+    
     public function getOrders($pair,$self = 0){
         $self = intval( (bool)$self );//return only 0 or 1
         return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=orderlist&self={$self}&pair={$pair}");
     }
     
-    public function getHistory($pair,$fromTime = false,$toTime = false){
+    public function getHistory($pair,$fromTime = false,$toTime = false,$self = false){
         
         if($fromTime === false){
             $fromTime = 0;
@@ -65,8 +70,8 @@ class CcexAPI {
         $fromDate = date('Y-d-m',(int)$fromTime);
         $toDate = date('Y-d-m',(int)$toTime);
         
-        return $this->jsonQuery($this->api_url."r.html?key={$this->api_key}&a=tradehistory&d1={$fromDate}&d2={$toDate}&pair={$pair}"); 
-    
+        $url = ($self) ? "r.html?key={$this->api_key}&" : "s.html?";
+        return $this->jsonQuery($this->api_url.$url."a=tradehistory&d1={$fromDate}&d2={$toDate}&pair={$pair}"); 
     }
     
     public function makeOrder($type,$pair,$quantity,$price){
