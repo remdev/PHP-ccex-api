@@ -24,12 +24,12 @@ $CcexAPI->getTickerInfo('btc-usd');
 
 Get trade volumes for specific pair
 ```
-$CcexAPI->getVolumes(24, 'btc-usd')
+$CcexAPI->getVolumes(24, 'btc-usd');
 ```
 
 Get last trade volumes for all pairs
 ```
-$CcexAPI->getVolumes(24)
+$CcexAPI->getVolumes(24);
 ```
 
 Get order list quick example
